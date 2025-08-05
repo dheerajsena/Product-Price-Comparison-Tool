@@ -38,8 +38,8 @@ if st.button("Run Comparison", use_container_width=True):
     else:
         with st.spinner("Running comparison..."):
             # Read Excel into DataFrames
-            marlin_df = pd.read_excel(marlin_file, sheet_name='Sheet1')
-            website_df = pd.read_excel(website_file, sheet_name='Sheet1')
+            marlin_df = pd.read_excel(marlin_file)  
+            website_df = pd.read_excel(website_file)
 
             # Clean column names
             marlin_df.columns = marlin_df.columns.str.strip()
@@ -96,3 +96,4 @@ if st.button("Run Comparison", use_container_width=True):
             file_name="Price_Comparison_Report.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
+
