@@ -65,22 +65,14 @@ if st.button("Run Comparison", use_container_width=True):
 
             # Prepare in-memory Excel
             output = BytesIO()
-            writer = pd.ExcelWriter(output, engine='xlsxwriter')
-            merged.to_excel(writer, sheet_name='Full Data', index=False)
-            merged[merged['Price Match']=='Match'].to_excel(writer, sheet_name='Matched', index=False)
-            merged[merged['Price Match']=='Mismatch'].to_excel(writer, sheet_name='Mismatched', index=False)
-            merged[merged['Comparison']=='Only in Website'].to_excel(writer, sheet_name='Only in Website', index=False)
-            merged[merged['Comparison']=='Only in Marlin'].to_excel(writer, sheet_name='Only in Marlin', index=False)
-            # Summary
-            summary = {
-                'Total Website': website_df.shape[0],
-                'Total Marlin': marlin_df.shape[0],
-                'Matches': merged[merged['Price Match']=='Match'].shape[0],
-                'Mismatches': merged[merged['Price Match']=='Mismatch'].shape[0]
-            }
-            summary_df = pd.DataFrame.from_dict(summary, orient='index', columns=['Count'])
-            summary_df.to_excel(writer, sheet_name='Summary')
-            writer.save()
+            with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+    merged.to_excel(writer, sheet_name='Full Data', index=False)
+    merged[merged['Price Match']=='Match'].to_excel(writer, sheet_name='Matched', index=False)
+    merged[merged['Price Match']=='Mismatch'].to_excel(writer, sheet_name='Mismatched', index=False)
+    merged[merged['Comparison']=='Only in Website'].to_excel(writer, sheet_name='Only in Website', index=False)
+    merged[merged['Comparison']=='Only in Marlin'].to_excel(writer, sheet_name='Only in Marlin', index=False)
+    summary_df.to_excel(writer, sheet_name='Summary')
+
             data = output.getvalue()
 
         st.success("Report ready!")
@@ -90,3 +82,4 @@ if st.button("Run Comparison", use_container_width=True):
             file_name="Price_Comparison_Report.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
+
